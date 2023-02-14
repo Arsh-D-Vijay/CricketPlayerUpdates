@@ -1,7 +1,7 @@
 package CricketComponents;
 
 import Player.Player;
-import Team.Teams;
+import Team.Team;
 
 public class Game {
 
@@ -9,13 +9,13 @@ public class Game {
     Innings secondInning;
     int maxPlayers;
 
-    public void startGame(Teams teamA, Teams teamB, float maxOvers, int maxPlayers) {
+    public void startGame(Team teamA, Team teamB, float maxOvers, int maxPlayers) {
         this.maxPlayers = maxPlayers;
         this.firstInning = new Innings(teamA, teamB);
         System.out.println(
                 "-----------------------------------------------------------------------------FIRST-HALF" +
                 "-----------------------------------------------------------------------------");
-        firstInning.play(maxOvers,maxPlayers);
+        firstInning.playInning(maxOvers,maxPlayers);
         displayScoreboard(firstInning);
 
         this.secondInning = new Innings(teamB, teamA);
@@ -23,7 +23,7 @@ public class Game {
         System.out.println(
                 "------------------------------------------------------------------------------SECOND-HALF" +
                 "------------------------------------------------------------------------------");
-        secondInning.play(maxOvers,maxPlayers);
+        secondInning.playInning(maxOvers,maxPlayers);
         displayScoreboard(secondInning);
         System.out.println();
         gameResult();

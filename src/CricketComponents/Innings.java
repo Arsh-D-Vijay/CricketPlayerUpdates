@@ -1,5 +1,5 @@
 package CricketComponents;
-import Team.Teams;
+import Team.Team;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,8 +7,8 @@ public class Innings {
 
     public int runs;
     public int wickets;
-    public Teams battingTeam;
-    public Teams bowlingTeam;
+    public Team battingTeam;
+    public Team bowlingTeam;
     public Set<Integer> didBowling = new HashSet<>();
     public int targetScore = Integer.MAX_VALUE;
     public int strikerID;
@@ -20,7 +20,7 @@ public class Innings {
         return this;
     }
 
-    public Innings(Teams battingTeam, Teams bowlingTeam) {
+    public Innings(Team battingTeam, Team bowlingTeam) {
         this.battingTeam = battingTeam;
         this.bowlingTeam = bowlingTeam;
         this.runs = 0;
@@ -30,7 +30,7 @@ public class Innings {
         this.bowlerID = this.bowlingTeam.randomNewBowler(1);
     }
 
-    public void play(float maxOvers,int maxPlayers) {
+    public void playInning(float maxOvers, int maxPlayers) {
         System.out.println();
         float currentOver = 0f;
         while (currentOver < maxOvers) {

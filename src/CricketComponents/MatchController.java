@@ -1,6 +1,6 @@
 package CricketComponents;
 
-import Team.Teams;
+import Team.Team;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -11,8 +11,8 @@ public class MatchController {
     private float maxOver = 6f; // Default Maximum Over that can be played are 6
 
 
-    private Teams batTeam;
-    private Teams bowlTeam;
+    private Team batTeam;
+    private Team bowlTeam;
 
     // Some Final Fields
     Scanner scan = new Scanner(System.in); // Scanner class object
@@ -22,7 +22,7 @@ public class MatchController {
     }
 
 
-    public void seriesMatch(int numberOfMatches, Teams teamA, Teams teamB,int maxPlayers) {
+    public void seriesMatch(int numberOfMatches, Team teamA, Team teamB, int maxPlayers) {
         while (numberOfMatches > 0) {
             System.out.println();
             toss(teamA, teamB);
@@ -30,12 +30,13 @@ public class MatchController {
             game.startGame(batTeam, bowlTeam, maxOver,maxPlayers);
             numberOfMatches--;
             System.out.println(
-                    "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-**MATCH ENDED*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                    "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-* MATCH " +
+                    "ENDED -*-**-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
         }
         seriesResult(teamA, teamB);
     }
 
-    private void toss(Teams team1, Teams team2) {
+    private void toss(Team team1, Team team2) {
         System.out.println("Begin the TOSS: ");
         System.out.println("Choose Heads (0) or Tails (1)");
         int calledToss = scan.nextInt();
@@ -72,7 +73,7 @@ public class MatchController {
             bowlTeam = team1;
         }
     }
-    private void seriesResult(Teams teamA, Teams teamB) {
+    private void seriesResult(Team teamA, Team teamB) {
         // Series Winner Check
         System.out.println("\n==================================================");
         if (teamA.matchesWon > teamB.matchesWon) {

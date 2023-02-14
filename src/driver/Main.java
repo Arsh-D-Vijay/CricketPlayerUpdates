@@ -2,7 +2,7 @@ package driver;
 
 import CricketComponents.MatchController;
 import Player.Player;
-import Team.Teams;
+import Team.Team;
 
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ public class Main {
 
         System.out.print("ENTER THE NAME OF YOUR TEAM : ");
         String teamName1 = scan.next();
-        Teams team1 = new Teams(teamName1);
+        Team team1 = new Team(teamName1);
         for(int i= 1; i<=numberOfPlayers;i++){
             System.out.print("\tEnter the Player"+ i +" Name:  ");
             String name = scan.next();
@@ -29,7 +29,7 @@ public class Main {
         System.out.println();
         System.out.print("ENTER THE NAME OF OPPONENT TEAM : ");
         String teamName2 = scan.next();
-        Teams team2 = new Teams(teamName2);
+        Team team2 = new Team(teamName2);
         for(int i= 1; i<=numberOfPlayers;i++){
             System.out.print("\tEnter the Player"+ i +" Name:  ");
             String name = scan.next();
@@ -46,7 +46,7 @@ public class Main {
         MatchController game = new MatchController();
         game.setMaxOver(maxOver);
         game.seriesMatch(matchesToPlay,team1,team2,numberOfPlayers);
-//         Team.Teams T1 = new Team.Teams("Arsh",4);
+//         Team.Team T1 = new Team.Team("Arsh",4);
 
     }
 }
