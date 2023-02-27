@@ -1,6 +1,6 @@
 package Player;
 
-import Team.Teams;
+import Team.Team;
 
 import java.util.HashMap;
 
@@ -13,7 +13,7 @@ public class Player {
     private int wicketsTaken;
     private int totalWicketsTaken;
 
-    private Teams playerTeam;
+    private Team playerTeam;
 
     public String getPlayerName() {
         return playerName;
@@ -39,7 +39,7 @@ public class Player {
         return totalWicketsTaken;
     }
 
-    public Teams getPlayerTeam() {
+    public Team getPlayerTeam() {
         return playerTeam;
     }
 
@@ -49,15 +49,14 @@ public class Player {
 
     HashMap<Integer,int[]> playerPerformanceHistory;
 
-    public Player(String name, int playerPlayingStyle, Teams playerTeam, int playerID){
+    public Player(String name, int playerPlayingStyle, Team playerTeam){
         this.playerName = name;
         this.playerPlayingStyle = playerPlayingStyle;
         this.playerTeam = playerTeam;
-        playerTeam.addPlayerToTeam(playerID, this);
+        playerTeam.addPlayerToTeam(this);
     }
 
     public int playNextBall() {
-        // get random number
         double number = Math.random();
 
         if (this.playerPlayingStyle == 1) {

@@ -1,21 +1,36 @@
 package CricketComponents;
 
+import DataAccessObject.MatchDao;
+import DataAccessObject.TeamDao;
 import Player.Player;
-import Team.Teams;
+import Team.Team;
 
 public class Game {
 
-    Innings firstInning;
-    Innings secondInning;
-    int maxPlayers;
+    private static int playerCounter=0;
+    private String matchID;
+    public Innings firstInning;
+    public Innings secondInning;
+    public String winner;
+    public int maxPlayers;
+    public float maxOvers;
 
-    public void startGame(Teams teamA, Teams teamB, float maxOvers, int maxPlayers) {
+    public Game() {
+        this.matchID = "MAT_"+playerCounter;
+    }
+
+    public String getMatchID() {
+        return matchID;
+    }
+
+    public void startGame(Team teamA, Team teamB, float maxOvers, int maxPlayers) {
         this.maxPlayers = maxPlayers;
+        this.maxOvers = maxOvers;
         this.firstInning = new Innings(teamA, teamB);
         System.out.println(
                 "-----------------------------------------------------------------------------FIRST-HALF" +
                 "-----------------------------------------------------------------------------");
-        firstInning.play(maxOvers,maxPlayers);
+        firstInning.playInning(maxOvers,maxPlayers);
         displayScoreboard(firstInning);
 
         this.secondInning = new Innings(teamB, teamA);
@@ -23,7 +38,7 @@ public class Game {
         System.out.println(
                 "------------------------------------------------------------------------------SECOND-HALF" +
                 "------------------------------------------------------------------------------");
-        secondInning.play(maxOvers,maxPlayers);
+        secondInning.playInning(maxOvers,maxPlayers);
         displayScoreboard(secondInning);
         System.out.println();
         gameResult();
@@ -31,34 +46,39 @@ public class Game {
 
     private void gameResult() {
         if (firstInning.runs > secondInning.runs) {
-            System.out.println("Team : " + firstInning.battingTeam.teamName + " has won the match by " +
+            System.out.println("Team : " + firstInning.battingTeam.getTeamName() + " has won the match by " +
                                (firstInning.runs - secondInning.runs) + "runs.");
-            firstInning.battingTeam.matchesWon++;
+            firstInning.battingTeam.addToMatchesWon();
+            winner = firstInning.battingTeam.getTeamID();
         } else if (firstInning.runs < secondInning.runs) {
-            System.out.println("Team : " + secondInning.battingTeam.teamName + " has won the match by " +
+            System.out.println("Team : " + secondInning.battingTeam.getTeamName() + " has won the match by " +
                                (maxPlayers - 1 - secondInning.wickets) + " wickets.");
-            secondInning.battingTeam.matchesWon++;
-        } else {
+            secondInning.battingTeam.addToMatchesWon();
+            winner = secondInning.battingTeam.getTeamID();
+
+        }  else {
             System.out.println("DRAW");
+            winner = "DRAW";
         }
+
     }
 
     private void displayScoreboard(Innings innings) {
         System.out.println(
                 "+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*- SCOREBOARD " +
                 "-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*-+*");
-        System.out.println("BATTING TEAM: " + innings.battingTeam.teamName);
+        System.out.println("BATTING TEAM: " + innings.battingTeam.getTeamName());
         Player p;
-        for (int i = 1; (i <= maxPlayers && i <= innings.wickets + 2); i++) {
-            p = innings.battingTeam.getPlayerByID(i);
+        for (int i = 0; (i < maxPlayers && i < innings.wickets + 2); i++) {
+            p = innings.battingTeam.getPlayerByIndex(i);
             System.out.println(p + " Runs Scored: " + p.getPlayerRuns());
             p.savePerformance();
         }
         System.out.println();
-        System.out.println("BOWLING TEAM: " + innings.bowlingTeam.teamName);
+        System.out.println("BOWLING TEAM: " + innings.bowlingTeam.getTeamName());
 
         for (int id : innings.didBowling) {
-            p = innings.bowlingTeam.getPlayerByID(id);
+            p = innings.bowlingTeam.getPlayerByIndex(id);
             System.out.println(p + " Wickets Taken: " + p.getWicketsTaken());
             p.savePerformance();
         }

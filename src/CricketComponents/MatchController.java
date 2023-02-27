@@ -1,6 +1,8 @@
 package CricketComponents;
 
-import Team.Teams;
+import DataAccessObject.MatchDao;
+import DataAccessObject.TeamDao;
+import Team.Team;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -8,34 +10,62 @@ import java.util.Scanner;
 public class MatchController {
 
     //    Declaring Class Variables
+    private static int counter = 0;
+    private String seriesID;
     private float maxOver = 6f; // Default Maximum Over that can be played are 6
 
 
-    private Teams batTeam;
-    private Teams bowlTeam;
+    private Team batTeam;
+    private Team bowlTeam;
 
     // Some Final Fields
     Scanner scan = new Scanner(System.in); // Scanner class object
+
+    public MatchController() {
+        this.seriesID = "SER_" + ++counter;
+    }
+
+    public String getSeriesID() {
+        return seriesID;
+    }
+
+    public float getMaxOver() {
+        return maxOver;
+    }
+
+    public Team getBatTeam() {
+        return batTeam;
+    }
+
+    public Team getBowlTeam() {
+        return bowlTeam;
+    }
 
     public void setMaxOver(int maxOver) {
         this.maxOver = maxOver;
     }
 
 
-    public void seriesMatch(int numberOfMatches, Teams teamA, Teams teamB,int maxPlayers) {
+    public void seriesMatch(int numberOfMatches, Team teamA, Team teamB, int maxPlayers) {
         while (numberOfMatches > 0) {
             System.out.println();
             toss(teamA, teamB);
             Game game = new Game();
             game.startGame(batTeam, bowlTeam, maxOver,maxPlayers);
+            MatchDao.insertGameData(game);
+            batTeam.addToMatchesPlayed();
+            bowlTeam.addToMatchesPlayed();
+            TeamDao.updateTeamPerformance(batTeam);
+            TeamDao.updateTeamPerformance(bowlTeam);
             numberOfMatches--;
             System.out.println(
-                    "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-**MATCH ENDED*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                    "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-* MATCH " +
+                    "ENDED -*-**-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
         }
         seriesResult(teamA, teamB);
     }
 
-    private void toss(Teams team1, Teams team2) {
+    private void toss(Team team1, Team team2) {
         System.out.println("Begin the TOSS: ");
         System.out.println("Choose Heads (0) or Tails (1)");
         int calledToss = scan.nextInt();
@@ -57,9 +87,9 @@ public class MatchController {
             System.out.println("You have LOST the TOSS");
             optedPlay = rand.nextInt(1, 3);
             if (optedPlay == 2) {
-                System.out.println(team2.teamName + " has chosen to Bat first!!..");
+                System.out.println(team2.getTeamName() + " has chosen to Bat first!!..");
             } else {
-                System.out.println(team2.teamName + " has chosen to Bowl first!!..");
+                System.out.println(team2.getTeamName() + " has chosen to Bowl first!!..");
             }
         }
 
@@ -72,14 +102,14 @@ public class MatchController {
             bowlTeam = team1;
         }
     }
-    private void seriesResult(Teams teamA, Teams teamB) {
+    private void seriesResult(Team teamA, Team teamB) {
         // Series Winner Check
-        System.out.println("\n==================================================");
-        if (teamA.matchesWon > teamB.matchesWon) {
-            System.out.println("Team " + teamA.teamName + " has won the Series with maximum win of " + teamA.matchesWon);
-        } else if (teamA.matchesWon < teamB.matchesWon) {
-            System.out.println("Team " + teamB.teamName + " has won the Series with maximum win of " + teamB.matchesWon);
-        } else {
+        System.out.println("\n===================================================");
+        if (teamA.getMatchesWon() > teamB.getMatchesWon()) {
+            System.out.println("Team " + teamA.getTeamName() + " has won the Series with maximum win of " + teamA.getMatchesWon());
+        } else if (teamA.getMatchesWon() < teamB.getMatchesWon()) {
+            System.out.println("Team " + teamB.getTeamName() + " has won the Series with maximum win of " + teamB.getMatchesWon());
+        }else {
             System.out.println(" Nobody WON the Series as both teams has equal Wins!!!");
         }
         System.out.println("===================================================");
