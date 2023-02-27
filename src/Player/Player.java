@@ -57,6 +57,7 @@ public class Player {
     }
 
     public int playNextBall() {
+        // get random number
         double number = Math.random();
 
         if (this.playerPlayingStyle == 1) {
